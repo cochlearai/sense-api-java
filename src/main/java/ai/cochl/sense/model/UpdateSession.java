@@ -28,7 +28,7 @@ import java.io.IOException;
  * modify session state 
  */
 @ApiModel(description = "modify session state ")
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-05-13T09:39:26.296786Z[Etc/UTC]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
 public class UpdateSession {
   public static final String SERIALIZED_NAME_MAKE_READONLY = "make_readonly";
   @SerializedName(SERIALIZED_NAME_MAKE_READONLY)

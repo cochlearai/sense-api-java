@@ -2,7 +2,6 @@
 
 Cochl. Sense API
 - API version: v0.0.1
-  - Build date: 2021-05-13T09:39:26.296786Z[Etc/UTC]
 
 Cochl. Sense API allows to detect what is contained inside sound. Send audio
 data over the internet and discover what it contains
@@ -52,7 +51,7 @@ Add this dependency to your project's POM:
 <dependency>
   <groupId>ai.cochl</groupId>
   <artifactId>sense-api</artifactId>
-  <version>v0.0.1-SNAPSHOT</version>
+  <version>v0.0.1</version>
   <scope>compile</scope>
 </dependency>
 ```
@@ -62,7 +61,7 @@ Add this dependency to your project's POM:
 Add this dependency to your project's build file:
 
 ```groovy
-compile "ai.cochl:sense-api:v0.0.1-SNAPSHOT"
+compile "ai.cochl:sense-api:v0.0.1"
 ```
 
 ### Others
@@ -75,7 +74,7 @@ mvn clean package
 
 Then manually install the following JARs:
 
-* `target/sense-api-v0.0.1-SNAPSHOT.jar`
+* `target/sense-api-v0.0.1.jar`
 * `target/lib/*.jar`
 
 ## Getting Started

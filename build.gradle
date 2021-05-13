@@ -3,7 +3,7 @@ apply plugin: 'eclipse'
 apply plugin: 'java'
 
 group = 'ai.cochl'
-version = 'v0.0.1-SNAPSHOT'
+version = 'v0.0.1'
 
 buildscript {
     repositories {
