@@ -1,0 +1,728 @@
+openapi: 3.0.1
+info:
+  contact:
+    email: support@cochl.ai
+  description: "Cochl. Sense API allows to detect what is contained inside sound.\
+    \ Send audio\ndata over the internet and discover what it contains\n\nThat page\
+    \ contains the openapi specification of Cochl. Sense API.\nFeel free to *download*\
+    \ and use the specification as you wish. For instance, \nyou could generate any\
+    \ client to interact with our backend by using \n[openapi generator](https://openapi-generator.tech/).\
+    \ With `npx` and `java` \ninstalled locally, python client could be generated\
+    \ by running  \n\n```\nnpx @openapitools/openapi-generator-cli generate -i openapi.json\
+    \ -g python -o python-client\n```\n"
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: https://cochl.ai
+  title: Cochl. Sense API
+  version: v0.0.1
+externalDocs:
+  description: Link to our general documentation
+  url: https://docs.cochl.ai
+servers:
+- url: https://api.cochl.ai/sense/api/v0/
+tags:
+- description: "Sense API Audio Session is the heart of the API. An audio session\
+    \ represents \none audio source that will be inferenced*. Audio source can be\
+    \ either a file \nor a stream. \n\n**inferenced: analyzed by our deep learning\
+    \ neural network*\n\n### Lifetime\nAn audio session goes through 3 states during\
+    \ its lifetime : \n\n*writeable -> readonly -> deleted*\n\n- chunk can be uploaded\
+    \ if and only if session is *writeable*\n- status can be readonly if and only\
+    \ if session is *not deleted*\n\nState can become *readonly*\n- by manually updating\
+    \ session with PATCH request\n- when an error occurs\n- when session total_size\
+    \ has been reached\n\nState can become *deleted*.\n- by manually deleting session\
+    \ with DELETE request\n- when session becomes inactive*\n\n**inactive: a session\
+    \ is considered inactive if no chunks have been uploaded \nfor more than one hour*\n\
+    \n\n### Upload \nAudio needs to be sent to the server by chunk. The maximum allowed\
+    \ size of \na chunk is *1MiB* *(1MiB == 1024KiB)*\n\n- For a **stream**, we recommand\
+    \ sending **half second long** audio chunk.\nThis allows to have the shortest\
+    \ latency between audio recording and \ninferenced results\n- For a **file**,\
+    \ we recommand sending file by chunk of **1MiB** \n\nOne big difference between\
+    \ stream and file are how they are decoded. \nFor a stream, every chunk is required\
+    \ to be decodable*, whereas for \na file, the concatenation of all the chunks\
+    \ needs to be decodable.\n\n**decodable: an audio source is decodable if by having\
+    \ only the content-type \nand the raw data, it is possible to decode the audio*\n\
+    \n\n### Inference\nOnce chunks are received, audio will start beeing inferenced\
+    \ automatically\non our server\n- For a **stream**, chunks are **inferenced immediatly**\n\
+    - For a **file**, chunks are **inferenced when session state becomes readonly**\n\
+    \n\n### Status\nInference results can be retrieved on the status endpoint.\n\n\
+    To get all results of a given session, it is recommand to use `next_token`. \n\
+    It gives the warranty to read all results in correct order exactly once.\n\n*Note:\
+    \ In the future, results from deleted audio session will be accessible on \nanother\
+    \ endpoint*\n\n\n### Error \nIn case an error occured during the session, that\
+    \ session becomes readonly\nand pending inferences of chunks are canceled. An\
+    \ error message will be \navailable in the session status\n\nA typical error is\
+    \ a content-type decoding error. For instance when audio \ncontent  type was set\
+    \ as audio/mp3, but the actual data sent was audio/wav\n"
+  name: Audio Session
+paths:
+  /audio_sessions/:
+    post:
+      description: "Create a new session. An api key is required. Session parameters\
+        \ are \nimmutable and can be set at creation only\n"
+      operationId: create_session
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSession'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionRefs'
+          description: |
+            session was created successfully
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericError'
+          description: |
+            parameter is missing or not formated properly
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericError'
+          description: |
+            authentication failed. For instance api key is missing or invalid
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericError'
+          description: "unexpected server error. If error persists, you can \ncontact\
+            \ support@cochl.ai to fix the problem.\n"
+      security:
+      - API_Key: []
+      summary: Create Session
+      tags:
+      - Audio Session
+      x-contentType: application/json
+      x-accepts: application/json
+  /audio_sessions/{session_id}:
+    delete:
+      description: "Change state of session to *deleted*. All future call on the session\
+        \ \nwill return 404\n"
+      operationId: delete_session
+      parameters:
+      - description: |
+          session id represents unique identifier for an audio session
+        explode: false
+        in: path
+        name: session_id
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "204":
+          description: |
+            session successfully deleted
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericError'
+          description: |
+            resources doesn't exist or has been deleted
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericError'
+          description: "unexpected server error. If error persists, you can \ncontact\
+            \ support@cochl.ai to fix the problem.\n"
+      summary: Delete Session
+      tags:
+      - Audio Session
+      x-accepts: application/json
+    patch:
+      description: |
+        Update a session
+      operationId: update_session
+      parameters:
+      - description: |
+          session id represents unique identifier for an audio session
+        explode: false
+        in: path
+        name: session_id
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateSession'
+        required: true
+      responses:
+        "204":
+          description: |
+            session has been updated successfully
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericError'
+          description: |
+            parameter is missing or not formated properly
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericError'
+          description: |
+            resources doesn't exist or has been deleted
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericError'
+          description: "unexpected server error. If error persists, you can \ncontact\
+            \ support@cochl.ai to fix the problem.\n"
+      summary: Update Session
+      tags:
+      - Audio Session
+      x-contentType: application/json
+      x-accepts: application/json
+  /audio_sessions/{session_id}/status:
+    get:
+      description: "Get session status\n\n*Note that if all chunks didn't finish to\
+        \ be inferenced, server will \nwait at least one result to be  available in\
+        \ the required page range\nbefore returning result. Such waiting can lead\
+        \ to http requests timeout.\nTherefore we recommand to implement a client\
+        \ retry logic*\n"
+      operationId: read_status
+      parameters:
+      - description: |
+          session id represents unique identifier for an audio session
+        explode: false
+        in: path
+        name: session_id
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: |
+          how many existing elements to skip before returning the first result
+          control how many result to receive
+        explode: true
+        in: query
+        name: offset
+        required: false
+        schema:
+          default: 0
+          minimum: 0
+          type: integer
+        style: form
+      - description: "limit the length of the returned results array to limit size\
+          \ of the\nreturned payload \n"
+        explode: true
+        in: query
+        name: count
+        required: false
+        schema:
+          default: 1024
+          maximum: 1024
+          minimum: 0
+          type: integer
+        style: form
+      - description: "next token can be used from a previous page result. It allows\
+          \ to \niterate through all next elements of a collection. If next_token\
+          \ is \nset, offset and limit will be ignored\n"
+        explode: true
+        in: query
+        name: next_token
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionStatus'
+          description: |
+            successful operation
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericError'
+          description: |
+            parameter is missing or not formated properly
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericError'
+          description: |
+            resources doesn't exist or has been deleted
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericError'
+          description: "unexpected server error. If error persists, you can \ncontact\
+            \ support@cochl.ai to fix the problem.\n"
+      summary: Read Status
+      tags:
+      - Audio Session
+      x-accepts: application/json
+  /audio_sessions/{session_id}/chunks/{chunk_sequence}:
+    put:
+      description: "Upload new audio chunk \n"
+      operationId: upload_chunk
+      parameters:
+      - description: |
+          session id represents unique identifier for an audio session
+        explode: false
+        in: path
+        name: session_id
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: "chunk represent the chunk number. This is needs to be  counter\
+          \ \nstarting from 0 and growing by one on each requests \n"
+        explode: false
+        in: path
+        name: chunk_sequence
+        required: true
+        schema:
+          type: integer
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AudioChunk'
+        description: |
+          raw binary chunk
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SessionRefs'
+          description: |
+            chunk successfully uploaded
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericError'
+          description: |
+            parameter is missing or not formated properly
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericError'
+          description: |
+            session is not writeable anymore
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericError'
+          description: |
+            resources doesn't exist or has been deleted
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericError'
+          description: |
+            chunk sequence is invalid
+        "413":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericError'
+          description: |
+            audio chunk size must be smaller than 1MiB
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenericError'
+          description: "unexpected server error. If error persists, you can \ncontact\
+            \ support@cochl.ai to fix the problem.\n"
+      summary: Upload Chunk
+      tags:
+      - Audio Session
+      x-contentType: application/json
+      x-accepts: application/json
+components:
+  parameters:
+    SessionID:
+      description: |
+        session id represents unique identifier for an audio session
+      explode: false
+      in: path
+      name: session_id
+      required: true
+      schema:
+        type: string
+      style: simple
+    ChunkSequence:
+      description: "chunk represent the chunk number. This is needs to be  counter\
+        \ \nstarting from 0 and growing by one on each requests \n"
+      explode: false
+      in: path
+      name: chunk_sequence
+      required: true
+      schema:
+        type: integer
+      style: simple
+    PageOffset:
+      description: |
+        how many existing elements to skip before returning the first result
+        control how many result to receive
+      explode: true
+      in: query
+      name: offset
+      required: false
+      schema:
+        default: 0
+        minimum: 0
+        type: integer
+      style: form
+    PageCount:
+      description: "limit the length of the returned results array to limit size of\
+        \ the\nreturned payload \n"
+      explode: true
+      in: query
+      name: count
+      required: false
+      schema:
+        default: 1024
+        maximum: 1024
+        minimum: 0
+        type: integer
+      style: form
+    PageNext:
+      description: "next token can be used from a previous page result. It allows\
+        \ to \niterate through all next elements of a collection. If next_token is\
+        \ \nset, offset and limit will be ignored\n"
+      explode: true
+      in: query
+      name: next_token
+      required: false
+      schema:
+        type: string
+      style: form
+  responses:
+    BadRequest:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GenericError'
+      description: |
+        parameter is missing or not formated properly
+    Unauthorized:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GenericError'
+      description: |
+        authentication failed. For instance api key is missing or invalid
+    NotFound:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GenericError'
+      description: |
+        resources doesn't exist or has been deleted
+    InternalServerError:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GenericError'
+      description: "unexpected server error. If error persists, you can \ncontact\
+        \ support@cochl.ai to fix the problem.\n"
+  schemas:
+    AudioChunk:
+      description: "audio chunk \n"
+      example:
+        data: data
+      properties:
+        data:
+          description: |
+            raw audio encoded as base64
+          type: string
+      required:
+      - data
+      type: object
+    AudioContentType:
+      description: "type of audio to send. Check \n[content-type documentation](https://docs.cochl.ai/todo)\
+        \ for an exaustive\nlist of available content type\n"
+      example: audio/x-raw; rate=44100; format=s24le
+      type: string
+    AudioType:
+      description: |
+        wether the audio that will be sent is a stream or a file
+      enum:
+      - stream
+      - file
+      example: stream
+      type: string
+    CreateSession:
+      description: |
+        options to create a new session.
+
+        Make sure that specified type and content_type are compatible.
+        [more info](https://docs.cochl.ai/todo)
+      example:
+        content_type: audio/x-raw; rate=44100; format=s24le
+        total_size: 1
+        type: stream
+      properties:
+        content_type:
+          description: "type of audio to send. Check \n[content-type documentation](https://docs.cochl.ai/todo)\
+            \ for an exaustive\nlist of available content type\n"
+          example: audio/x-raw; rate=44100; format=s24le
+          type: string
+        type:
+          $ref: '#/components/schemas/AudioType'
+        total_size:
+          description: "if set, it allows to automatically change the state of the\
+            \ session\nto `readonly` when at least `total_size` bytes of audio chunk\
+            \ have \nbeen uploaded. \n\nFor stream, this can be used to limit the\
+            \ maximum duration of the \nsession.\n\nFor a file, this allows to automatically\
+            \ start inferencing when the \nwhole file has been sent. We recommand\
+            \ to set the size for files as \nit allows to do one less API call to\
+            \ start the inferencing\n"
+          minimum: 1
+          type: integer
+      required:
+      - content_type
+      - type
+      type: object
+    GenericError:
+      description: |
+        error is sent when an error happens
+      properties:
+        status_code:
+          description: "http status code returned \n"
+          type: integer
+        error:
+          description: "human readable description of the error. Note that the value\
+            \ should\nnot be used programaticaly as the description might be changed\
+            \ at \nany moment\n"
+          type: string
+      required:
+      - error
+      - status_code
+      type: object
+    Page:
+      description: "contains the range of elements that have been returned for a given\
+        \ \ncollection\n"
+      example:
+        total: 4096
+        offset: 2048
+        count: 1024
+        next_token: next_token
+      properties:
+        offset:
+          description: |
+            index of the first return element
+          example: 2048
+          minimum: 0
+          type: integer
+        count:
+          description: |
+            the number of elements that have been returned
+          example: 1024
+          maximum: 1024
+          minimum: 0
+          type: integer
+        total:
+          description: |
+            the total number of available element in the collection at the moment
+          example: 4096
+          minimum: 0
+          type: integer
+        next_token:
+          description: "next token can be used in the next page request to get following\
+            \ \nresults. If not present, it means that page has reach the end of \n\
+            collection\n"
+          type: string
+      required:
+      - count
+      - offset
+      - total
+      type: object
+    Sense:
+      description: |
+        inference related status
+      example:
+        in_progress: true
+        page:
+          total: 4096
+          offset: 2048
+          count: 1024
+          next_token: next_token
+        results:
+        - start_time: 6.027456183070403
+          probability: 0.08008281904610115
+          end_time: 1.4658129805029452
+          tag: Knock
+        - start_time: 6.027456183070403
+          probability: 0.08008281904610115
+          end_time: 1.4658129805029452
+          tag: Knock
+      properties:
+        in_progress:
+          description: |
+            is true when there are still some pending chunks that were uploaded
+            but are not inferenced yet
+          type: boolean
+        page:
+          $ref: '#/components/schemas/Page'
+        results:
+          description: |
+            contains paginated results of what has been inferenced so far
+          items:
+            $ref: '#/components/schemas/SenseEvent'
+          type: array
+      type: object
+    SenseEvent:
+      description: |
+        contains data returned by Cochl.Sense model
+      example:
+        start_time: 6.027456183070403
+        probability: 0.08008281904610115
+        end_time: 1.4658129805029452
+        tag: Knock
+      properties:
+        probability:
+          description: "probablity that the event occured. 0. means not possible at\
+            \ all and \n1. means that it is certain\n"
+          format: double
+          maximum: 1
+          minimum: 0
+          type: number
+        start_time:
+          description: |
+            represent start of the window, in second, where inference was done.
+            Note that start_time will increase by window_hop on every step
+          format: double
+          type: number
+        end_time:
+          description: |
+            represent end of the window, in second where inference was done.
+            Note that end_time is window_length after start_time
+          format: double
+          type: number
+        tag:
+          description: |
+            name of what was recognized during inference.
+          example: Knock
+          type: string
+      required:
+      - end_time
+      - probability
+      - start_time
+      - tag
+      type: object
+    SessionRefs:
+      description: |
+        list of session links
+      example:
+        session_id: 5vlv0r6SBUPYaUju1PFFalGhGVcyg
+        chunk_sequence: 0
+      properties:
+        session_id:
+          description: |
+            session id of the session that can be used to interact with API
+          example: 5vlv0r6SBUPYaUju1PFFalGhGVcyg
+          type: string
+        chunk_sequence:
+          description: |
+            chunk are uploaded in sequence. This represent the sequence of the
+            next chunk to upload
+          example: 0
+          type: integer
+      required:
+      - chunk_sequence
+      - session_id
+      type: object
+    SessionStatus:
+      description: |
+        contains all the data for the product Cochl. Sense
+      example:
+        inference:
+          in_progress: true
+          page:
+            total: 4096
+            offset: 2048
+            count: 1024
+            next_token: next_token
+          results:
+          - start_time: 6.027456183070403
+            probability: 0.08008281904610115
+            end_time: 1.4658129805029452
+            tag: Knock
+          - start_time: 6.027456183070403
+            probability: 0.08008281904610115
+            end_time: 1.4658129805029452
+            tag: Knock
+        refs:
+          session_id: 5vlv0r6SBUPYaUju1PFFalGhGVcyg
+          chunk_sequence: 0
+        state: writeable
+        error: error
+      properties:
+        state:
+          description: |
+            state in which the session is
+          enum:
+          - writeable
+          - readonly
+          type: string
+        error:
+          description: |
+            an error occured during the session
+          type: string
+        refs:
+          $ref: '#/components/schemas/SessionRefs'
+        inference:
+          $ref: '#/components/schemas/Sense'
+      required:
+      - inference
+      - refs
+      - state
+      type: object
+    UpdateSession:
+      description: |
+        modify session state
+      example:
+        make_readonly: true
+      properties:
+        make_readonly:
+          description: "if set to true, will set session state to readonly       \
+            \     \n\n*Note that setting make_readonly to false once session is readonly\n\
+            will not make the session writeable again*\n"
+          type: boolean
+      type: object
+  securitySchemes:
+    API_Key:
+      description: "We use simple api key to authentify requests on the backend. Api\
+        \ keys are \nscoped to a given project. To get an api key, go to the \n[dashboard\
+        \ projects page](https://dashboard.cochl.ai/projects/api).\nOne key is available\
+        \ for each projects. If no projects are \npresent, \"*add new project*\" allows\
+        \ to create a new project.\n\nOnce the key is retreived, it will be required\
+        \ to be passed in the http\nrequest headers `x-api-key: YOUR_API_KEY`\n"
+      in: header
+      name: x-api-key
+      type: apiKey
+
