@@ -2,7 +2,7 @@
 
 Cochl. Sense API
 - API version: v0.0.1
-  - Build date: 2021-05-13T09:34:55.860779Z[Etc/UTC]
+  - Build date: 2021-05-13T09:39:26.296786Z[Etc/UTC]
 
 Cochl. Sense API allows to detect what is contained inside sound. Send audio
 data over the internet and discover what it contains
