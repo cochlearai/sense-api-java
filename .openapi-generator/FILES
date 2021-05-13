@@ -1,5 +1,4 @@
 .gitignore
-.openapi-generator-ignore
 .travis.yml
 README.md
 api/openapi.yaml
@@ -53,14 +52,3 @@ src/main/java/ai/cochl/sense/model/SenseEvent.java
 src/main/java/ai/cochl/sense/model/SessionRefs.java
 src/main/java/ai/cochl/sense/model/SessionStatus.java
 src/main/java/ai/cochl/sense/model/UpdateSession.java
-src/test/java/ai/cochl/sense/api/AudioSessionApiTest.java
-src/test/java/ai/cochl/sense/model/AudioChunkTest.java
-src/test/java/ai/cochl/sense/model/AudioTypeTest.java
-src/test/java/ai/cochl/sense/model/CreateSessionTest.java
-src/test/java/ai/cochl/sense/model/GenericErrorTest.java
-src/test/java/ai/cochl/sense/model/PageTest.java
-src/test/java/ai/cochl/sense/model/SenseEventTest.java
-src/test/java/ai/cochl/sense/model/SenseTest.java
-src/test/java/ai/cochl/sense/model/SessionRefsTest.java
-src/test/java/ai/cochl/sense/model/SessionStatusTest.java
-src/test/java/ai/cochl/sense/model/UpdateSessionTest.java

@@ -30,7 +30,7 @@ import java.io.IOException;
  * contains all the data for the product Cochl. Sense 
  */
 @ApiModel(description = "contains all the data for the product Cochl. Sense ")
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-05-13T06:55:57.558403Z[Etc/UTC]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-05-13T08:10:55.238100Z[Etc/UTC]")
 public class SessionStatus {
   /**
    * state in which the session is 

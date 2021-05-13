@@ -32,7 +32,7 @@ import java.util.List;
  * inference related status 
  */
 @ApiModel(description = "inference related status ")
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-05-13T06:55:57.558403Z[Etc/UTC]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-05-13T08:10:55.238100Z[Etc/UTC]")
 public class Sense {
   public static final String SERIALIZED_NAME_IN_PROGRESS = "in_progress";
   @SerializedName(SERIALIZED_NAME_IN_PROGRESS)
