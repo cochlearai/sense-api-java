@@ -28,7 +28,7 @@ import java.io.IOException;
  * list of session links 
  */
 @ApiModel(description = "list of session links ")
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-05-13T08:10:55.238100Z[Etc/UTC]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-05-13T09:34:55.860779Z[Etc/UTC]")
 public class SessionRefs {
   public static final String SERIALIZED_NAME_SESSION_ID = "session_id";
   @SerializedName(SERIALIZED_NAME_SESSION_ID)

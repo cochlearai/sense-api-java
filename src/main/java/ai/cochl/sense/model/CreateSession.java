@@ -29,7 +29,7 @@ import java.io.IOException;
  * options to create a new session.  Make sure that specified type and content_type are compatible. [more info](https://docs.cochl.ai/todo) 
  */
 @ApiModel(description = "options to create a new session.  Make sure that specified type and content_type are compatible. [more info](https://docs.cochl.ai/todo) ")
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-05-13T08:10:55.238100Z[Etc/UTC]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-05-13T09:34:55.860779Z[Etc/UTC]")
 public class CreateSession {
   public static final String SERIALIZED_NAME_CONTENT_TYPE = "content_type";
   @SerializedName(SERIALIZED_NAME_CONTENT_TYPE)

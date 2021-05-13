@@ -28,7 +28,7 @@ import java.io.IOException;
  * contains data returned by Cochl.Sense model 
  */
 @ApiModel(description = "contains data returned by Cochl.Sense model ")
-@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-05-13T08:10:55.238100Z[Etc/UTC]")
+@javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2021-05-13T09:34:55.860779Z[Etc/UTC]")
 public class SenseEvent {
   public static final String SERIALIZED_NAME_PROBABILITY = "probability";
   @SerializedName(SERIALIZED_NAME_PROBABILITY)
