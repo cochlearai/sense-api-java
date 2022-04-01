@@ -17,7 +17,7 @@ Method | HTTP request | Description
 
 Create Session
 
-Create a new session. An api key is required. Session parameters are  immutable and can be set at creation only 
+Create a new session. An API key is required. Session parameters are immutable and can be set at creation only. 
 
 ### Example
 ```java
@@ -78,10 +78,10 @@ Name | Type | Description  | Notes
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-**200** | session was created successfully  |  -  |
-**400** | parameter is missing or not formated properly  |  -  |
-**401** | authentication failed. For instance api key is missing or invalid  |  -  |
-**500** | unexpected server error. If error persists, you can  contact support@cochl.ai to fix the problem.  |  -  |
+**200** | The session was created successfully  |  -  |
+**400** | The parameter is missing or not formatted properly  |  -  |
+**401** | Authentication failed. For instance, API key is missing or invalid  |  -  |
+**500** | Unexpected server error. If the error persists, you can contact support@cochl.ai to fix the problem.  |  -  |
 
 <a name="deleteSession"></a>
 # **deleteSession**
@@ -89,7 +89,7 @@ Name | Type | Description  | Notes
 
 Delete Session
 
-Change state of session to *deleted*. All future call on the session  will return 404 
+Change the state of the session to *deleted*. All future call on the session will return 404 
 
 ### Example
 ```java
@@ -106,7 +106,7 @@ public class Example {
     defaultClient.setBasePath("https://api.cochl.ai/sense/api/v0");
 
     AudioSessionApi apiInstance = new AudioSessionApi(defaultClient);
-    String sessionId = "sessionId_example"; // String | session id represents unique identifier for an audio session 
+    String sessionId = "sessionId_example"; // String | Session id represents a unique identifier for an audio session 
     try {
       apiInstance.deleteSession(sessionId);
     } catch (ApiException e) {
@@ -124,7 +124,7 @@ public class Example {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **sessionId** | **String**| session id represents unique identifier for an audio session  |
+ **sessionId** | **String**| Session id represents a unique identifier for an audio session  |
 
 ### Return type
 
@@ -142,9 +142,9 @@ No authorization required
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-**204** | session successfully deleted  |  -  |
-**404** | resources doesn&#39;t exist or has been deleted  |  -  |
-**500** | unexpected server error. If error persists, you can  contact support@cochl.ai to fix the problem.  |  -  |
+**204** | The session successfully deleted  |  -  |
+**404** | Resources don&#39;t exist or have been deleted  |  -  |
+**500** | Unexpected server error. If the error persists, you can contact support@cochl.ai to fix the problem.  |  -  |
 
 <a name="readStatus"></a>
 # **readStatus**
@@ -152,7 +152,7 @@ No authorization required
 
 Read Status
 
-Get session status  *Note that if all chunks didn&#39;t finish to be inferenced, server will  wait at least one result to be  available in the required page range before returning result. Such waiting can lead to http requests timeout. Therefore we recommand to implement a client retry logic* 
+Get session status  *Note that if all chunks didn&#39;t finish to be inferenced, the server will wait for at least one result to be  available in the required page range before returning result. Such waiting can lead to HTTP requests timeout. Therefore we recommend implementing a client retry logic.* 
 
 ### Example
 ```java
@@ -169,10 +169,10 @@ public class Example {
     defaultClient.setBasePath("https://api.cochl.ai/sense/api/v0");
 
     AudioSessionApi apiInstance = new AudioSessionApi(defaultClient);
-    String sessionId = "sessionId_example"; // String | session id represents unique identifier for an audio session 
-    Integer offset = 0; // Integer | how many existing elements to skip before returning the first result control how many result to receive 
-    Integer count = 1024; // Integer | limit the length of the returned results array to limit size of the returned payload  
-    String nextToken = "nextToken_example"; // String | next token can be used from a previous page result. It allows to  iterate through all next elements of a collection. If next_token is  set, offset and limit will be ignored 
+    String sessionId = "sessionId_example"; // String | Session id represents a unique identifier for an audio session 
+    Integer offset = 0; // Integer | How many existing elements to skip before returning the first result control how many results to receive 
+    Integer count = 1024; // Integer | Limit the length of the returned results array to limit the size of the returned payload 
+    String nextToken = "nextToken_example"; // String | The next token can be used from a previous page result. It allows to iterating through all the next elements of a collection. If next_token is set, offset and limit will be ignored 
     try {
       SessionStatus result = apiInstance.readStatus(sessionId, offset, count, nextToken);
       System.out.println(result);
@@ -191,10 +191,10 @@ public class Example {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **sessionId** | **String**| session id represents unique identifier for an audio session  |
- **offset** | **Integer**| how many existing elements to skip before returning the first result control how many result to receive  | [optional] [default to 0]
- **count** | **Integer**| limit the length of the returned results array to limit size of the returned payload   | [optional] [default to 1024]
- **nextToken** | **String**| next token can be used from a previous page result. It allows to  iterate through all next elements of a collection. If next_token is  set, offset and limit will be ignored  | [optional]
+ **sessionId** | **String**| Session id represents a unique identifier for an audio session  |
+ **offset** | **Integer**| How many existing elements to skip before returning the first result control how many results to receive  | [optional] [default to 0]
+ **count** | **Integer**| Limit the length of the returned results array to limit the size of the returned payload  | [optional] [default to 1024]
+ **nextToken** | **String**| The next token can be used from a previous page result. It allows to iterating through all the next elements of a collection. If next_token is set, offset and limit will be ignored  | [optional]
 
 ### Return type
 
@@ -212,10 +212,10 @@ No authorization required
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-**200** | successful operation  |  -  |
-**400** | parameter is missing or not formated properly  |  -  |
-**404** | resources doesn&#39;t exist or has been deleted  |  -  |
-**500** | unexpected server error. If error persists, you can  contact support@cochl.ai to fix the problem.  |  -  |
+**200** | Successful operation  |  -  |
+**400** | Parameter is missing or not formatted properly  |  -  |
+**404** | Resources don’t exist or have been deleted  |  -  |
+**500** | Unexpected server error. If the error persists, you can contact support@cochl.ai to fix the problem.  |  -  |
 
 <a name="updateSession"></a>
 # **updateSession**
@@ -240,7 +240,7 @@ public class Example {
     defaultClient.setBasePath("https://api.cochl.ai/sense/api/v0");
 
     AudioSessionApi apiInstance = new AudioSessionApi(defaultClient);
-    String sessionId = "sessionId_example"; // String | session id represents unique identifier for an audio session 
+    String sessionId = "sessionId_example"; // String | Session id represents a unique identifier for an audio session 
     UpdateSession updateSession = new UpdateSession(); // UpdateSession | 
     try {
       apiInstance.updateSession(sessionId, updateSession);
@@ -259,7 +259,7 @@ public class Example {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **sessionId** | **String**| session id represents unique identifier for an audio session  |
+ **sessionId** | **String**| Session id represents a unique identifier for an audio session  |
  **updateSession** | [**UpdateSession**](UpdateSession.md)|  |
 
 ### Return type
@@ -278,10 +278,10 @@ No authorization required
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-**204** | session has been updated successfully  |  -  |
-**400** | parameter is missing or not formated properly  |  -  |
-**404** | resources doesn&#39;t exist or has been deleted  |  -  |
-**500** | unexpected server error. If error persists, you can  contact support@cochl.ai to fix the problem.  |  -  |
+**204** | The session has been updated successfully  |  -  |
+**400** | The parameter is missing or not formatted properly  |  -  |
+**404** | Resources don’t exist or have been deleted  |  -  |
+**500** | Unexpected server error. If the error persists, you can contact support@cochl.ai to fix the problem.  |  -  |
 
 <a name="uploadChunk"></a>
 # **uploadChunk**
@@ -289,7 +289,7 @@ No authorization required
 
 Upload Chunk
 
-Upload new audio chunk  
+Upload new audio chunk 
 
 ### Example
 ```java
@@ -306,8 +306,8 @@ public class Example {
     defaultClient.setBasePath("https://api.cochl.ai/sense/api/v0");
 
     AudioSessionApi apiInstance = new AudioSessionApi(defaultClient);
-    String sessionId = "sessionId_example"; // String | session id represents unique identifier for an audio session 
-    Integer chunkSequence = 56; // Integer | chunk represent the chunk number. This is needs to be  counter  starting from 0 and growing by one on each requests  
+    String sessionId = "sessionId_example"; // String | Session id represents a unique identifier for an audio session 
+    Integer chunkSequence = 56; // Integer | Chunk represents the chunk number. This is needed to be a counter starting from 0 and growing by one on each request 
     AudioChunk audioChunk = new AudioChunk(); // AudioChunk | raw binary chunk 
     try {
       SessionRefs result = apiInstance.uploadChunk(sessionId, chunkSequence, audioChunk);
@@ -327,8 +327,8 @@ public class Example {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **sessionId** | **String**| session id represents unique identifier for an audio session  |
- **chunkSequence** | **Integer**| chunk represent the chunk number. This is needs to be  counter  starting from 0 and growing by one on each requests   |
+ **sessionId** | **String**| Session id represents a unique identifier for an audio session  |
+ **chunkSequence** | **Integer**| Chunk represents the chunk number. This is needed to be a counter starting from 0 and growing by one on each request  |
  **audioChunk** | [**AudioChunk**](AudioChunk.md)| raw binary chunk  |
 
 ### Return type
@@ -347,11 +347,11 @@ No authorization required
 ### HTTP response details
 | Status code | Description | Response headers |
 |-------------|-------------|------------------|
-**200** | chunk successfully uploaded  |  -  |
-**400** | parameter is missing or not formated properly  |  -  |
-**403** | session is not writeable anymore  |  -  |
-**404** | resources doesn&#39;t exist or has been deleted  |  -  |
-**409** | chunk sequence is invalid  |  -  |
-**413** | audio chunk size must be smaller than 1MiB  |  -  |
-**500** | unexpected server error. If error persists, you can  contact support@cochl.ai to fix the problem.  |  -  |
+**200** | The chunk successfully uploaded  |  -  |
+**400** | The parameter is missing or not formatted properly  |  -  |
+**403** | The session is not writable anymore  |  -  |
+**404** | Resources don’t exist or have been deleted  |  -  |
+**409** | The chunk sequence is invalid  |  -  |
+**413** | Audio chunk size must be smaller than 1MiB  |  -  |
+**500** | Unexpected server error. If the error persists, you can contact support@cochl.ai to fix the problem.  |  -  |
 

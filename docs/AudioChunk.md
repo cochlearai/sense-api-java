@@ -2,13 +2,13 @@
 
 # AudioChunk
 
-audio chunk  
+AudioChunk 
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**data** | **String** | raw audio encoded as base64  | 
+**data** | **String** | Raw audio encoded as base64  | 
 
 
 

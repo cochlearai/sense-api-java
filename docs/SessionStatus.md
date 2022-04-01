@@ -2,14 +2,14 @@
 
 # SessionStatus
 
-contains all the data for the product Cochl. Sense 
+Contains all the data for the product Cochl.Sense 
 
 ## Properties
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**state** | [**StateEnum**](#StateEnum) | state in which the session is  | 
-**error** | **String** | an error occured during the session  |  [optional]
+**state** | [**StateEnum**](#StateEnum) | State in which the session is  | 
+**error** | **String** | An error occurred during the session  |  [optional]
 **refs** | [**SessionRefs**](SessionRefs.md) |  | 
 **inference** | [**Sense**](Sense.md) |  | 
 
@@ -19,7 +19,7 @@ Name | Type | Description | Notes
 
 Name | Value
 ---- | -----
-WRITEABLE | &quot;writeable&quot;
+WRITABLE | &quot;writable&quot;
 READONLY | &quot;readonly&quot;
 
 
