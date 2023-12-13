@@ -12,9 +12,11 @@ docs/GenericError.md
 docs/Page.md
 docs/Sense.md
 docs/SenseEvent.md
+docs/SenseEventTag.md
 docs/SessionRefs.md
 docs/SessionStatus.md
 docs/UpdateSession.md
+docs/WindowHop.md
 git_push.sh
 gradle.properties
 gradle/wrapper/gradle-wrapper.jar
@@ -49,6 +51,10 @@ src/main/java/ai/cochl/sense/model/GenericError.java
 src/main/java/ai/cochl/sense/model/Page.java
 src/main/java/ai/cochl/sense/model/Sense.java
 src/main/java/ai/cochl/sense/model/SenseEvent.java
+src/main/java/ai/cochl/sense/model/SenseEventTag.java
 src/main/java/ai/cochl/sense/model/SessionRefs.java
 src/main/java/ai/cochl/sense/model/SessionStatus.java
 src/main/java/ai/cochl/sense/model/UpdateSession.java
+src/main/java/ai/cochl/sense/model/WindowHop.java
+src/test/java/ai/cochl/sense/model/SenseEventTagTest.java
+src/test/java/ai/cochl/sense/model/WindowHopTest.java

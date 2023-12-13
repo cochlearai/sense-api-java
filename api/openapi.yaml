@@ -14,12 +14,12 @@ info:
     url: https://www.apache.org/licenses/LICENSE-2.0.html
   termsOfService: https://cochl.ai
   title: Cochl.Sense API
-  version: v1.0.0
+  version: v1.4.0
 externalDocs:
   description: Link to our general documentation
   url: https://docs.cochl.ai
 servers:
-- url: https://api.cochl.ai/sense/api/v0/
+- url: https://api.cochl.ai/sense/api/v1/
 tags:
 - description: |
     Sense API Audio Session is the heart of the API. An audio session represents
@@ -76,7 +76,7 @@ tags:
     Inference results can be retrieved on the status endpoint.
 
     To get all results of a given session, it is recommended to use `next_token`.
-    It gives the warranty to read all results incorrect order exactly once.
+    It gives the warranty to read all results in correct order exactly once.
 
     *Note: In the future, results from the deleted audio session will be accessible on
     another endpoint*
@@ -518,12 +518,6 @@ components:
       description: Type of audio to send.
       example: audio/x-raw; rate=44100; format=s24le
       type: string
-    AudioService:
-      description: |
-        Type of audio service. Check
-        [service documentation](https://docs.cochl.ai/todo) for an exaustive
-        list of available services
-      type: string
     AudioMetadatas:
       additionalProperties:
         type: string
@@ -547,12 +541,16 @@ components:
         Make sure that specified type and content_type are compatible.
         [more info](https://docs.cochl.ai/todo)
       example:
+        window_hop: 1s
         content_type: audio/x-raw; rate=44100; format=s24le
         metadatas:
           key: metadatas
-        service: service
+        default_sensitivity: 0
         total_size: 1
         type: stream
+        tags_sensitivity:
+          Siren: -2
+          Emergency_vehicle_siren: -1
       properties:
         content_type:
           description: Type of audio to send.
@@ -560,12 +558,6 @@ components:
           type: string
         type:
           $ref: '#/components/schemas/AudioType'
-        service:
-          description: |
-            Type of audio service. Check
-            [service documentation](https://docs.cochl.ai/todo) for an exaustive
-            list of available services
-          type: string
         metadatas:
           additionalProperties:
             type: string
@@ -588,6 +580,38 @@ components:
             it allows to do one less API call to start the inferencing
           minimum: 1
           type: integer
+        tags_sensitivity:
+          additionalProperties:
+            maximum: 2
+            minimum: -2
+            type: integer
+          description: |
+            If set, it allows to adjust the sensitivity of a given tag [in this list](https://docs.cochl.ai/sense/tags/)
+
+            The sensitivity adjustment ranges in [-2,2]
+
+            A value of 0 preserves the default sensitivity
+
+            Positive value reduces tag appearance, negative value increases it
+          example:
+            Siren: -2
+            Emergency_vehicle_siren: -1
+          type: object
+        default_sensitivity:
+          default: 0
+          description: |
+            If set, it allows to provide a default adjusted sensitivity for all tags
+
+            The sensitivity adjustment ranges in [-2,2]
+
+            0 is used if not set
+
+            Positive value reduces tag appearance, negative value increases it
+          maximum: 2
+          minimum: -2
+          type: integer
+        window_hop:
+          $ref: '#/components/schemas/WindowHop'
       required:
       - content_type
       - type
@@ -662,13 +686,19 @@ components:
           next_token: next_token
         results:
         - start_time: 6.027456183070403
-          probability: 0.08008281904610115
           end_time: 1.4658129805029452
-          tag: Knock
+          tags:
+          - probability: 0.08008281904610115
+            name: Knock
+          - probability: 0.08008281904610115
+            name: Knock
         - start_time: 6.027456183070403
-          probability: 0.08008281904610115
           end_time: 1.4658129805029452
-          tag: Knock
+          tags:
+          - probability: 0.08008281904610115
+            name: Knock
+          - probability: 0.08008281904610115
+            name: Knock
       properties:
         in_progress:
           description: |
@@ -689,18 +719,19 @@ components:
         Contains data returned by the model
       example:
         start_time: 6.027456183070403
-        probability: 0.08008281904610115
         end_time: 1.4658129805029452
-        tag: Knock
+        tags:
+        - probability: 0.08008281904610115
+          name: Knock
+        - probability: 0.08008281904610115
+          name: Knock
       properties:
-        probability:
+        tags:
           description: |
-            Probability that the event occurred. 0. means not possible at all and
-            1. means that it is certain
-          format: double
-          maximum: 1
-          minimum: 0
-          type: number
+            Contains results of what has been inferenced at the same time
+          items:
+            $ref: '#/components/schemas/SenseEventTag'
+          type: array
         start_time:
           description: |
             Represent the start of the window, in the second, where inference was done.
@@ -713,16 +744,34 @@ components:
             *Note that end_time is window_length after start_time*
           format: double
           type: number
-        tag:
+      required:
+      - end_time
+      - start_time
+      - tags
+      type: object
+    SenseEventTag:
+      description: |
+        Contains data of the sound recognized by the model
+      example:
+        probability: 0.08008281904610115
+        name: Knock
+      properties:
+        probability:
           description: |
-            Name of what was recognized during inference.
+            Probability that the event occurred. 0. means not possible at all and
+            1. means that it is certain
+          format: double
+          maximum: 1
+          minimum: 0
+          type: number
+        name:
+          description: |
+            Name of the sound recognized during the inference.
           example: Knock
           type: string
       required:
-      - end_time
+      - name
       - probability
-      - start_time
-      - tag
       type: object
     SessionRefs:
       description: |
@@ -759,13 +808,19 @@ components:
             next_token: next_token
           results:
           - start_time: 6.027456183070403
-            probability: 0.08008281904610115
             end_time: 1.4658129805029452
-            tag: Knock
+            tags:
+            - probability: 0.08008281904610115
+              name: Knock
+            - probability: 0.08008281904610115
+              name: Knock
           - start_time: 6.027456183070403
-            probability: 0.08008281904610115
             end_time: 1.4658129805029452
-            tag: Knock
+            tags:
+            - probability: 0.08008281904610115
+              name: Knock
+            - probability: 0.08008281904610115
+              name: Knock
         refs:
           session_id: 5vlv0r6SBUPYaUju1PFFalGhGVcyg
           chunk_sequence: 0
@@ -792,6 +847,48 @@ components:
       - refs
       - state
       type: object
+    TagsSensitivity:
+      additionalProperties:
+        maximum: 2
+        minimum: -2
+        type: integer
+      description: |
+        If set, it allows to adjust the sensitivity of a given tag [in this list](https://docs.cochl.ai/sense/tags/)
+
+        The sensitivity adjustment ranges in [-2,2]
+
+        A value of 0 preserves the default sensitivity
+
+        Positive value reduces tag appearance, negative value increases it
+      example:
+        Siren: -2
+        Emergency_vehicle_siren: -1
+      type: object
+    DefaultSensitivity:
+      default: 0
+      description: |
+        If set, it allows to provide a default adjusted sensitivity for all tags
+
+        The sensitivity adjustment ranges in [-2,2]
+
+        0 is used if not set
+
+        Positive value reduces tag appearance, negative value increases it
+      maximum: 2
+      minimum: -2
+      type: integer
+    WindowHop:
+      description: |
+        If set, it allows to adjust the sensitivity of a given tag [in this list]
+
+        The window hop adjustment can be set eith to 0.5s or 1s
+
+        By default, this value is set to 0.5s
+      enum:
+      - 0.5s
+      - 1s
+      example: 1s
+      type: string
     UpdateSession:
       description: |
         modify session state

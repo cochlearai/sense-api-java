@@ -1,6 +1,6 @@
 # AudioSessionApi
 
-All URIs are relative to *https://api.cochl.ai/sense/api/v0*
+All URIs are relative to *https://api.cochl.ai/sense/api/v1*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
@@ -32,7 +32,7 @@ import ai.cochl.sense.api.AudioSessionApi;
 public class Example {
   public static void main(String[] args) {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
-    defaultClient.setBasePath("https://api.cochl.ai/sense/api/v0");
+    defaultClient.setBasePath("https://api.cochl.ai/sense/api/v1");
     
     // Configure API key authorization: API_Key
     ApiKeyAuth API_Key = (ApiKeyAuth) defaultClient.getAuthentication("API_Key");
@@ -103,7 +103,7 @@ import ai.cochl.sense.api.AudioSessionApi;
 public class Example {
   public static void main(String[] args) {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
-    defaultClient.setBasePath("https://api.cochl.ai/sense/api/v0");
+    defaultClient.setBasePath("https://api.cochl.ai/sense/api/v1");
 
     AudioSessionApi apiInstance = new AudioSessionApi(defaultClient);
     String sessionId = "sessionId_example"; // String | Session id represents a unique identifier for an audio session 
@@ -166,7 +166,7 @@ import ai.cochl.sense.api.AudioSessionApi;
 public class Example {
   public static void main(String[] args) {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
-    defaultClient.setBasePath("https://api.cochl.ai/sense/api/v0");
+    defaultClient.setBasePath("https://api.cochl.ai/sense/api/v1");
 
     AudioSessionApi apiInstance = new AudioSessionApi(defaultClient);
     String sessionId = "sessionId_example"; // String | Session id represents a unique identifier for an audio session 
@@ -237,7 +237,7 @@ import ai.cochl.sense.api.AudioSessionApi;
 public class Example {
   public static void main(String[] args) {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
-    defaultClient.setBasePath("https://api.cochl.ai/sense/api/v0");
+    defaultClient.setBasePath("https://api.cochl.ai/sense/api/v1");
 
     AudioSessionApi apiInstance = new AudioSessionApi(defaultClient);
     String sessionId = "sessionId_example"; // String | Session id represents a unique identifier for an audio session 
@@ -303,7 +303,7 @@ import ai.cochl.sense.api.AudioSessionApi;
 public class Example {
   public static void main(String[] args) {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
-    defaultClient.setBasePath("https://api.cochl.ai/sense/api/v0");
+    defaultClient.setBasePath("https://api.cochl.ai/sense/api/v1");
 
     AudioSessionApi apiInstance = new AudioSessionApi(defaultClient);
     String sessionId = "sessionId_example"; // String | Session id represents a unique identifier for an audio session 

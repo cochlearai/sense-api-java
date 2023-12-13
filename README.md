@@ -1,7 +1,7 @@
 # sense-api
 
 Cochl.Sense API
-- API version: v1.0.0
+- API version: v1.4.0
 
 Cochl.Sense API allows to detect what is contained inside sound data. Send audio
 data over the internet to discover what it contains.
@@ -45,7 +45,7 @@ Add this dependency to your project's POM:
 <dependency>
   <groupId>ai.cochl</groupId>
   <artifactId>sense-api</artifactId>
-  <version>v1.0.0</version>
+  <version>v1.4.0</version>
   <scope>compile</scope>
 </dependency>
 ```
@@ -61,7 +61,7 @@ Add this dependency to your project's build file:
   }
 
   dependencies {
-     implementation "ai.cochl:sense-api:v1.0.0"
+     implementation "ai.cochl:sense-api:v1.4.0"
   }
 ```
 
@@ -75,7 +75,7 @@ mvn clean package
 
 Then manually install the following JARs:
 
-* `target/sense-api-v1.0.0.jar`
+* `target/sense-api-v1.4.0.jar`
 * `target/lib/*.jar`
 
 ## Getting Started
@@ -95,7 +95,7 @@ import ai.cochl.sense.api.AudioSessionApi;
 public class Example {
   public static void main(String[] args) {
     ApiClient defaultClient = Configuration.getDefaultApiClient();
-    defaultClient.setBasePath("https://api.cochl.ai/sense/api/v0");
+    defaultClient.setBasePath("https://api.cochl.ai/sense/api/v1");
     
     // Configure API key authorization: API_Key
     ApiKeyAuth API_Key = (ApiKeyAuth) defaultClient.getAuthentication("API_Key");
@@ -122,7 +122,7 @@ public class Example {
 
 ## Documentation for API Endpoints
 
-All URIs are relative to *https://api.cochl.ai/sense/api/v0*
+All URIs are relative to *https://api.cochl.ai/sense/api/v1*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
@@ -142,9 +142,11 @@ Class | Method | HTTP request | Description
  - [Page](docs/Page.md)
  - [Sense](docs/Sense.md)
  - [SenseEvent](docs/SenseEvent.md)
+ - [SenseEventTag](docs/SenseEventTag.md)
  - [SessionRefs](docs/SessionRefs.md)
  - [SessionStatus](docs/SessionStatus.md)
  - [UpdateSession](docs/UpdateSession.md)
+ - [WindowHop](docs/WindowHop.md)
 
 
 ## Documentation for Authorization

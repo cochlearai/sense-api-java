@@ -25,65 +25,67 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.IOException;
 
 /**
- * Error is sent when an error happens 
+ * Contains data of the sound recognized by the model 
  */
-@ApiModel(description = "Error is sent when an error happens ")
+@ApiModel(description = "Contains data of the sound recognized by the model ")
 @javax.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen")
-public class GenericError {
-  public static final String SERIALIZED_NAME_STATUS_CODE = "status_code";
-  @SerializedName(SERIALIZED_NAME_STATUS_CODE)
-  private Integer statusCode;
+public class SenseEventTag {
+  public static final String SERIALIZED_NAME_PROBABILITY = "probability";
+  @SerializedName(SERIALIZED_NAME_PROBABILITY)
+  private Double probability;
 
-  public static final String SERIALIZED_NAME_ERROR = "error";
-  @SerializedName(SERIALIZED_NAME_ERROR)
-  private String error;
+  public static final String SERIALIZED_NAME_NAME = "name";
+  @SerializedName(SERIALIZED_NAME_NAME)
+  private String name;
 
-  public GenericError() { 
+  public SenseEventTag() { 
   }
 
-  public GenericError statusCode(Integer statusCode) {
+  public SenseEventTag probability(Double probability) {
     
-    this.statusCode = statusCode;
+    this.probability = probability;
     return this;
   }
 
    /**
-   * HTTP status code returned 
-   * @return statusCode
+   * Probability that the event occurred. 0. means not possible at all and 1. means that it is certain 
+   * minimum: 0
+   * maximum: 1
+   * @return probability
   **/
   @javax.annotation.Nonnull
-  @ApiModelProperty(required = true, value = "HTTP status code returned ")
+  @ApiModelProperty(required = true, value = "Probability that the event occurred. 0. means not possible at all and 1. means that it is certain ")
 
-  public Integer getStatusCode() {
-    return statusCode;
+  public Double getProbability() {
+    return probability;
   }
 
 
-  public void setStatusCode(Integer statusCode) {
-    this.statusCode = statusCode;
+  public void setProbability(Double probability) {
+    this.probability = probability;
   }
 
 
-  public GenericError error(String error) {
+  public SenseEventTag name(String name) {
     
-    this.error = error;
+    this.name = name;
     return this;
   }
 
    /**
-   * Human-readable description of the error. *Note that the value should not be used programmatically as the description might be changed at any moment* 
-   * @return error
+   * Name of the sound recognized during the inference. 
+   * @return name
   **/
   @javax.annotation.Nonnull
-  @ApiModelProperty(required = true, value = "Human-readable description of the error. *Note that the value should not be used programmatically as the description might be changed at any moment* ")
+  @ApiModelProperty(example = "Knock", required = true, value = "Name of the sound recognized during the inference. ")
 
-  public String getError() {
-    return error;
+  public String getName() {
+    return name;
   }
 
 
-  public void setError(String error) {
-    this.error = error;
+  public void setName(String name) {
+    this.name = name;
   }
 
 
@@ -95,22 +97,22 @@ public class GenericError {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    GenericError genericError = (GenericError) o;
-    return Objects.equals(this.statusCode, genericError.statusCode) &&
-        Objects.equals(this.error, genericError.error);
+    SenseEventTag senseEventTag = (SenseEventTag) o;
+    return Objects.equals(this.probability, senseEventTag.probability) &&
+        Objects.equals(this.name, senseEventTag.name);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(statusCode, error);
+    return Objects.hash(probability, name);
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class GenericError {\n");
-    sb.append("    statusCode: ").append(toIndentedString(statusCode)).append("\n");
-    sb.append("    error: ").append(toIndentedString(error)).append("\n");
+    sb.append("class SenseEventTag {\n");
+    sb.append("    probability: ").append(toIndentedString(probability)).append("\n");
+    sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("}");
     return sb.toString();
   }
