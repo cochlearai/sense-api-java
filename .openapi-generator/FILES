@@ -56,5 +56,3 @@ src/main/java/ai/cochl/sense/model/SessionRefs.java
 src/main/java/ai/cochl/sense/model/SessionStatus.java
 src/main/java/ai/cochl/sense/model/UpdateSession.java
 src/main/java/ai/cochl/sense/model/WindowHop.java
-src/test/java/ai/cochl/sense/model/SenseEventTagTest.java
-src/test/java/ai/cochl/sense/model/WindowHopTest.java
